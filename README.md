@@ -1,2 +1,2 @@
 # BaseConverter
-A pretty calculator for doing instant conversions between base 2, 8, 10, and 16
+A simple but pretty calculator for doing parallel conversions between base 2, 10, and 16
