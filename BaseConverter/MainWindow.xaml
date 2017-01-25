@@ -4,90 +4,13 @@
 		Height="500" Width="800" ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow"
 		Title="Base Converter (Jonathan Ruisi 2015)" Loaded="Window_Loaded">
-	<Window.Resources>
-		<Style x:Key="ButtonStyle" TargetType="Button">
-			<Setter Property="FontFamily" Value="Arial" />
-			<Setter Property="FontSize" Value="48" />
-			<Setter Property="FontWeight" Value="Bold" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Border Name="Border" Margin="0" Padding="0"
-								Background="{TemplateBinding Background}"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-							<ContentPresenter Name="Presenter"
-											  HorizontalAlignment="Center"
-											  VerticalAlignment="Center" />
-						</Border>
-						<ControlTemplate.Triggers>
-							<Trigger Property="IsEnabled" Value="False">
-								<Setter TargetName="Presenter" Property="Opacity" Value="0.25" />
-							</Trigger>
-						</ControlTemplate.Triggers>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-			<Style.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter Property="FontWeight" Value="Black" />
-				</Trigger>
-			</Style.Triggers>
-		</Style>
-
-		<Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
-			<Setter Property="OverridesDefaultStyle" Value="True" />
-			<Setter Property="Background" Value="LightGray" />
-			<Setter Property="BorderBrush" Value="#202020" />
-			<Setter Property="BorderThickness" Value="5" />
-			<Setter Property="FontFamily" Value="Segoe UI" />
-			<Setter Property="FontSize" Value="24" />
-			<Setter Property="FontWeight" Value="Bold" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="ToggleButton">
-						<Border Name="Border" CornerRadius="1"
-								Padding="{TemplateBinding Padding}"
-								Background="{TemplateBinding Background}"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-			<Style.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter Property="FontWeight" Value="Black" />
-					<Setter Property="BorderThickness" Value="8" />
-				</Trigger>
-				<Trigger Property="IsChecked" Value="True">
-					<Setter Property="BorderBrush" Value="#008000" />
-					<Setter Property="Foreground" Value="#008000" />
-					<Setter Property="FontWeight" Value="Black" />
-					<Setter Property="BorderThickness" Value="8" />
-				</Trigger>
-			</Style.Triggers>
-		</Style>
-
-		<Style x:Key="ToggleButtonStyle2" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonStyle}">
-			<Setter Property="BorderThickness" Value="3" />
-			<Setter Property="FontSize" Value="18" />
-			<Style.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter Property="FontWeight" Value="Black" />
-					<Setter Property="BorderThickness" Value="5" />
-				</Trigger>
-				<Trigger Property="IsChecked" Value="True">
-					<Setter Property="BorderBrush" Value="#FF8000" />
-					<Setter Property="Foreground" Value="#FF8000" />
-					<Setter Property="FontWeight" Value="Black" />
-					<Setter Property="BorderThickness" Value="5" />
-				</Trigger>
-			</Style.Triggers>
-		</Style>
-	</Window.Resources>
-
+	
+	<!--
+	Main layout grid which divides the window into three columns
+	LEFT:    Keypad
+	MIDDLE:  Divider rectangle (visually separates the keypad and calculation areas)
+	RIGHT:   Calculation area
+	-->
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="300" />
@@ -95,6 +18,19 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
+		<!-- Rectangle which divides the keypad area (left) and calculation area (right) -->
+		<Rectangle Grid.Column="1">
+			<Rectangle.Fill>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+					<GradientStop Color="#202020" Offset="0.0" />
+					<GradientStop Color="#D0D0D0" Offset="0.2" />
+					<GradientStop Color="#D0D0D0" Offset="0.8" />
+					<GradientStop Color="#202020" Offset="1.0" />
+				</LinearGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+
+		<!-- Keypad area layout (left side of window) -->
 		<Grid Grid.Column="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" />
@@ -203,17 +139,7 @@
 					Click="ButtonClear_Click" />
 		</Grid>
 
-		<Rectangle Grid.Column="1">
-			<Rectangle.Fill>
-				<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-					<GradientStop Color="#202020" Offset="0.0" />
-					<GradientStop Color="#D0D0D0" Offset="0.2" />
-					<GradientStop Color="#D0D0D0" Offset="0.8" />
-					<GradientStop Color="#202020" Offset="1.0" />
-				</LinearGradientBrush>
-			</Rectangle.Fill>
-		</Rectangle>
-
+		<!-- Calculation area layout (right side of window) -->
 		<Grid Grid.Column="2">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
@@ -226,6 +152,12 @@
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
+			<!-- Black rectangles that visually divide the calculation area into four sections -->
+			<Rectangle Grid.Row="2" Margin="0,5,0,0" Fill="#202020" />
+			<Rectangle Grid.Row="4" Fill="#202020" />
+			<Rectangle Grid.Row="6" Fill="#202020" />
+
+			<!-- Grid containing the three radix buttons -->
 			<Grid Grid.Row="0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
@@ -249,6 +181,7 @@
 				</ToggleButton>
 			</Grid>
 
+			<!-- Horizontal StackPanel containing the data size buttons -->
 			<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0"
 						HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 				<TextBlock FontFamily="Segoe UI" FontSize="18" FontWeight="Bold"
@@ -276,8 +209,7 @@
 				</ToggleButton>
 			</StackPanel>
 
-			<Rectangle Grid.Row="2" Margin="0,5,0,0" Fill="#202020" />
-
+			<!-- Grid which contains the binary calculation area -->
 			<Grid Grid.Row="3">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="25" />
@@ -295,8 +227,7 @@
 						 TextChanged="TextBoxBinary_TextChanged" />
 			</Grid>
 
-			<Rectangle Grid.Row="4" Fill="#202020" />
-
+			<!-- Grid which contains the decimal calculation area -->
 			<Grid Grid.Row="5">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="25" />
@@ -314,8 +245,7 @@
 						 TextChanged="TextBoxDecimal_TextChanged" />
 			</Grid>
 
-			<Rectangle Grid.Row="6" Fill="#202020" />
-
+			<!-- Grid which contains the hexadecimal calculation area -->
 			<Grid Grid.Row="7">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="25" />
